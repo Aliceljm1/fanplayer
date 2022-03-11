@@ -765,7 +765,7 @@ void* player_open(char *file, void *win, PLAYER_INIT_PARAMS *params)
     avformat_network_init();
 
     // setup log
-    av_log_set_level   (AV_LOG_WARNING);
+    av_log_set_level   (AV_LOG_INFO);
     av_log_set_callback(avlog_callback);
 
     // alloc player context
