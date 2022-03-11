@@ -469,9 +469,10 @@ void render_video(void *hrender, AVFrame *video)
                 render->sws_context = sws_getContext(render->sws_src_width, render->sws_src_height, render->sws_src_pixfmt,
                     render->sws_dst_width, render->sws_dst_height, render->sws_dst_pixfmt, render->cmnvars->init_params->swscale_type, 0, 0, 0);
             }
-            if (render->sws_context) sws_scale(render->sws_context, (const uint8_t**)srcpic.data, srcpic.linesize, 0, render->sws_src_height, dstpic.data, dstpic.linesize);
+            if (render->sws_context) 
+                sws_scale(render->sws_context, (const uint8_t**)srcpic.data, srcpic.linesize, 0, render->sws_src_height, dstpic.data, dstpic.linesize);
         }
-        vdev_unlock(render->vdev);
+        vdev_unlock(render->vdev);//会调用底层d3d或者gdi的unlock，渲染线程的pthread_cond_wait会自动被触发自动渲染准备好数据 add by ljm
 
 #if CONFIG_ENABLE_SNAPSHOT
         if (render->status & RENDER_SNAPSHOT) {
