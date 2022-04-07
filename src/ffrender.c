@@ -415,6 +415,10 @@ static void render_setup_srcrect(RENDER *render, AVFrame *video, AVFrame *srcpic
     }
 }
 
+/**
+* 渲染视频，核心是将当前的AVFrame *video渲染到目标对象中去，比如gdi渲染目标就是c->hdcdst
+* 
+*/
 void render_video(void *hrender, AVFrame *video)
 {
     RENDER *render = (RENDER*)hrender;
@@ -455,7 +459,7 @@ void render_video(void *hrender, AVFrame *video)
 #endif
 
         render_setup_srcrect(render, &lockedpic, &srcpic);
-        vdev_lock(render->vdev, dstpic.data, dstpic.linesize, srcpic.pts);
+        vdev_lock(render->vdev, dstpic.data, dstpic.linesize, srcpic.pts);//创建底层的bitmap，图像数据关联dstpic.data，此时c->hbitmaps数据为空
         if (dstpic.data[0] && srcpic.format != -1 && srcpic.pts != -1) {
             if (  render->sws_src_pixfmt != srcpic.format || render->sws_src_width != srcpic.width || render->sws_src_height != srcpic.height
                || render->sws_dst_pixfmt != vdev->pixfmt  || render->sws_dst_width != dstpic.linesize[6] || render->sws_dst_height != dstpic.linesize[7]) {
@@ -463,16 +467,17 @@ void render_video(void *hrender, AVFrame *video)
                 render->sws_src_width  = srcpic.width;
                 render->sws_src_height = srcpic.height;
                 render->sws_dst_pixfmt = vdev->pixfmt;
-                render->sws_dst_width  = dstpic.linesize[6];
+                render->sws_dst_width  = dstpic.linesize[6];//当前播放器窗口支持调整宽高，从而最终影响render->sws_dst_width
                 render->sws_dst_height = dstpic.linesize[7];
                 if (render->sws_context) sws_freeContext(render->sws_context);
                 render->sws_context = sws_getContext(render->sws_src_width, render->sws_src_height, render->sws_src_pixfmt,
                     render->sws_dst_width, render->sws_dst_height, render->sws_dst_pixfmt, render->cmnvars->init_params->swscale_type, 0, 0, 0);
             }
+            //sws_scale可以进行图像缩放，执行之后dstpic.data已经存在值了，对应c->hbitmaps数据。
             if (render->sws_context) 
                 sws_scale(render->sws_context, (const uint8_t**)srcpic.data, srcpic.linesize, 0, render->sws_src_height, dstpic.data, dstpic.linesize);
         }
-        vdev_unlock(render->vdev);//会调用底层d3d或者gdi的unlock，渲染线程的pthread_cond_wait会自动被触发自动渲染准备好数据 add by ljm
+        vdev_unlock(render->vdev);//会调用底层d3d或者gdi的unlock，渲染线程的pthread_cond_wait会自动被触发自动渲染准备好数据，此时流程转到 video_render_thread_proc, add by ljm
 
 #if CONFIG_ENABLE_SNAPSHOT
         if (render->status & RENDER_SNAPSHOT) {

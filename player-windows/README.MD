@@ -43,5 +43,10 @@ void CplayerDlg::PlayerOpenFile(TCHAR *file)
 
 日志级别定义：av_log_set_level   (AV_LOG_INFO); 可以自己写代码输入日志到文件中去
 
+拖动进度条调用函数，修改播放器状态，设置seek值。 拖动之后会协调解码线程执行seek,搜索：PS_F_SEEK
+void player_seek(void *hplayer, int64_t ms, int type)
+
+播放事件相关消息在播放器的各个逻辑处会发送消息如MSG_OPEN_DONE，MSG_PLAY_COMPLETED
+
 #EXTINF:-1 ,CCTV13 测试m3u8视频播放器
 http://39.134.115.163:8080/PLTV/88888910/224/3221225638/index.m3u8

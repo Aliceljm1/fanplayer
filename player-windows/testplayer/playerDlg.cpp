@@ -318,12 +318,12 @@ void CplayerDlg::OnPaint()
         player_getparam(m_ffPlayer, PARAM_MEDIA_DURATION, &total);
         player_getparam(m_ffPlayer, PARAM_MEDIA_POSITION, &pos  );
         if (!m_bLiveStream) {
-            if (total > 0 && pos > 0) {
+            if (total > 0 && pos > 0) {//绘制播放进度条
                 CPaintDC dc(this);
                 RECT fill  = m_rtClient;
                 fill.right = (LONG)(fill.right * pos / total);
                 fill.top   = fill.bottom - 2;
-                dc.FillSolidRect(&fill, RGB(250, 150, 0));
+                dc.FillSolidRect(&fill, RGB(250, 0, 0));
                 fill.left  = fill.right;
                 fill.right = m_rtClient.right;
                 dc.FillSolidRect(&fill, RGB(0, 0, 0));
@@ -424,6 +424,7 @@ HBRUSH CplayerDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
     else return hbr;
 }
 
+//修改当前播放器窗口大小，会保持视频宽高比不变 add com by ljm 202204
 void CplayerDlg::OnSize(UINT nType, int cx, int cy)
 {
     CDialog::OnSize(nType, cx, cy);
@@ -444,7 +445,7 @@ BOOL CplayerDlg::PreTranslateMessage(MSG *pMsg)
     if (pMsg->message == MSG_FANPLAYER) {
         switch (pMsg->wParam) {
         case MSG_OPEN_DONE:
-            SetWindowText(TEXT("testplayer"));
+            SetWindowText(TEXT("testplayer"));//控制音量
             if (TRUE) { // set player dynamic params
                 int param = 0;
                 //++ set dynamic player params

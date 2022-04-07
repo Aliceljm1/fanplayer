@@ -6,7 +6,7 @@
 // 内部常量定义
 #define COMPLETED_COUNTER  10
 
-// 内部函数实现
+//设置视频显示区域，维持视频比例，不拉伸视频
 static void vdev_setup_vrect(VDEV_COMMON_CTXT *vdev)
 {
     int rw = vdev->rrect.right - vdev->rrect.left, rh = vdev->rrect.bottom - vdev->rrect.top, vw, vh;

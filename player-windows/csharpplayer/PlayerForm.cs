@@ -47,7 +47,7 @@ namespace csharpplayer
 
         private void PlayerForm_Load(object sender, EventArgs e)
         {
-            mPlayer = player_open("c:\\test.mp4", this.Handle, (IntPtr)0);
+            mPlayer = player_open("d:\\25.mp4", this.Handle, (IntPtr)0);
             player_play(mPlayer);
         }
 

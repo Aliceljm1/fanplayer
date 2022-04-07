@@ -33,10 +33,11 @@ static void* video_render_thread_proc(void *param)
                 vdev_win32_render_bboxes (c, c->hdcsrc, c->bbox_list);
                 vdev_win32_render_overlay(c, c->hdcsrc, 1);
                 BitBlt(c->hdcdst, c->rrect.left, c->rrect.top, c->rrect.right - c->rrect.left, c->rrect.bottom - c->rrect.top, c->hdcsrc, 0, 0, SRCCOPY);
+                //拷贝到目标c->hdcdst中去。这个hdc就是显示窗口surface对应的hdc，ctxt->hdcdst = GetDC((HWND)surface); 此时UI完成刷新
                 c->cmnvars->vpts = c->ppts[c->head];
                 av_log(NULL, AV_LOG_INFO, "vpts: %lld\n", c->cmnvars->vpts);
             }
-            if (++c->head == c->bufnum) c->head = 0;
+            if (++c->head == c->bufnum) c->head = 0;//当前代码支持同时渲染多个bitmap，缓存的bitmap个数是c->bufnum
             pthread_cond_signal(&c->cond);
         }
         pthread_mutex_unlock(&c->mutex);
@@ -48,6 +49,9 @@ static void* video_render_thread_proc(void *param)
     return NULL;
 }
 
+/**
+* 创建bitmap，图像关联buffer数据，外部会调用sws_scale填充数据 add by ljm 2022-4-6
+*/
 static void vdev_gdi_lock(void *ctxt, uint8_t *buffer[8], int linesize[8], int64_t pts)
 {
     VDEVGDICTXT *c       = (VDEVGDICTXT*)ctxt;
@@ -93,6 +97,9 @@ static void vdev_gdi_lock(void *ctxt, uint8_t *buffer[8], int linesize[8], int64
     }
 }
 
+/**
+*解锁之后会唤起渲染线程继续执行，pthread_cond_wait会被唤起
+*/
 static void vdev_gdi_unlock(void *ctxt)
 {
     VDEVGDICTXT *c = (VDEVGDICTXT*)ctxt;
