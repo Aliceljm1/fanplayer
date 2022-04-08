@@ -16,6 +16,7 @@
 #define TIMER_ID_DISP_DEFINITIONVAL 4
 #define TIMER_ID_DATARATE           5
 #define TIMER_ID_LIVEDESK           6
+#define MAX_WINDOW true //是否全屏，全屏之后无法控制窗口缩放来修改视频渲染大小
 
 static const int SCREEN_WIDTH  = GetSystemMetrics(SM_CXSCREEN);
 static const int SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
@@ -283,10 +284,12 @@ BOOL CplayerDlg::OnInitDialog()
     LONG lStyle = GetClassLong(GetSafeHwnd(), GCL_STYLE);
     lStyle &= ~CS_DBLCLKS;
     SetClassLong(GetSafeHwnd(), GCL_STYLE, lStyle);
-
-    // setup window size
-    MoveWindow(0, 0, 800, 480);
-
+    
+    // setup window size, 全屏化播放器 add by ljm
+    if(MAX_WINDOW)
+    MoveWindow(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    else 
+        MoveWindow(0, 0, 800, 600);
     // setup init timer
     SetTimer(TIMER_ID_FIRST_DIALOG, 100, NULL);
     return TRUE;  // return TRUE  unless you set the focus to a control
@@ -433,6 +436,12 @@ void CplayerDlg::OnSize(UINT nType, int cx, int cy)
         GetClientRect(&m_rtClient);
         cx = cx < SCREEN_WIDTH  ? cx : SCREEN_WIDTH;
         cy = cy < SCREEN_HEIGHT ? cy : SCREEN_HEIGHT;
+
+        if (MAX_WINDOW) {
+            cx = SCREEN_WIDTH;
+            cy = SCREEN_HEIGHT;
+        }
+
         player_setrect(m_ffPlayer, 0, 0, 0, cx, cy - 2);
         player_setrect(m_ffPlayer, 1, 0, 0, cx, cy - 2);
     }
@@ -457,6 +466,13 @@ BOOL CplayerDlg::PreTranslateMessage(MSG *pMsg)
                 // -255 - mute, +255 - max volume, 0 - 0dB
                 param = -0;  player_setparam(m_ffPlayer, PARAM_AUDIO_VOLUME, &param);
             }
+            {
+                int vmode = 0;//设置显示模式为拉伸VIDEO_MODE_STRETCHED，默认为保持视频比例不变 add by ljm
+                player_getparam(m_ffPlayer, PARAM_VIDEO_MODE, &vmode);
+                vmode = VIDEO_MODE_STRETCHED;
+                player_setparam(m_ffPlayer, PARAM_VIDEO_MODE, &vmode);
+            }
+
             player_setrect(m_ffPlayer, 0, 0, 0, m_rtClient.right, m_rtClient.bottom - 2);
             player_setrect(m_ffPlayer, 1, 0, 0, m_rtClient.right, m_rtClient.bottom - 2);
             if (m_bResetPlayer) {

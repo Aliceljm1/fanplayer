@@ -6,6 +6,7 @@ adev-win.c, Windows下audio播放处理
 vdev-d3d.c，d3d渲染video
 vdev-gdi， gid渲染video
 vdev-cmn.c,对于video渲染层的统一抽象
+## 下列部分函数相关详细描述见 ffplayer.h
 
 
 初始化ffplayer
@@ -50,3 +51,4 @@ void player_seek(void *hplayer, int64_t ms, int type)
 
 #EXTINF:-1 ,CCTV13 测试m3u8视频播放器
 http://39.134.115.163:8080/PLTV/88888910/224/3221225638/index.m3u8
+
