@@ -137,6 +137,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;msimg32.lib;pthread.lib;avutil.lib;avcodec.lib;avformat.lib;avdevice.lib;avfilter.lib;swscale.lib;swresample.lib;soundtouch.lib;yolodet.lib;%(AdditionalDependencies)</AdditionalDependencies>

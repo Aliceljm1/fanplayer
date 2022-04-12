@@ -34,7 +34,7 @@ static void* video_render_thread_proc(void *param)
 static void* audio_decode_thread_proc(void *param)
 
 ## 细节方面
-创建render的两个dev, 通过fanplayer.ini来决定是创建d3d还是gdi,(d3d配置项为vdev_render_type=1 )
+创建render的两个dev, 通过fanplayer.ini来决定是创建d3d还是gdi,(d3d配置项为vdev_render_type=1 ,gdi=0)
     // init for cmnvars
     render->adev = adev_create(adevtype, 5, render->adev_buf_size, cmnvars);
     render->vdev = vdev_create(vdevtype, surface, 0, w, h, 1000 * frate.den / frate.num, cmnvars);

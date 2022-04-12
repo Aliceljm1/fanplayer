@@ -16,7 +16,8 @@
 #define TIMER_ID_DISP_DEFINITIONVAL 4
 #define TIMER_ID_DATARATE           5
 #define TIMER_ID_LIVEDESK           6
-#define MAX_WINDOW true //是否全屏，全屏之后无法控制窗口缩放来修改视频渲染大小
+#define MAX_WINDOW false //是否全屏，全屏之后无法控制窗口缩放来修改视频渲染大小
+#define KEEP_SIZE  true //是否保持视频纵横比
 
 static const int SCREEN_WIDTH  = GetSystemMetrics(SM_CXSCREEN);
 static const int SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
@@ -466,7 +467,8 @@ BOOL CplayerDlg::PreTranslateMessage(MSG *pMsg)
                 // -255 - mute, +255 - max volume, 0 - 0dB
                 param = -0;  player_setparam(m_ffPlayer, PARAM_AUDIO_VOLUME, &param);
             }
-            {
+            if(!KEEP_SIZE){
+
                 int vmode = 0;//设置显示模式为拉伸VIDEO_MODE_STRETCHED，默认为保持视频比例不变 add by ljm
                 player_getparam(m_ffPlayer, PARAM_VIDEO_MODE, &vmode);
                 vmode = VIDEO_MODE_STRETCHED;

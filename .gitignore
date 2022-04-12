@@ -8,5 +8,7 @@ obj/
 *.user
 *.suo
 *.aps
+*.opensdf
+*.sdf
 /player-windows/.vs/
 
