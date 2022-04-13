@@ -451,6 +451,8 @@ static int player_prepare(PLAYER *player)
         player->init_params.video_vheight= player->init_params.video_oheight = player->vcodec_context->height;
     }
 
+    player_send_message(player->cmnvars.winmsg, ret ? MSG_OPEN_FAILED : MSG_OPEN_DONE, player);
+
     // calculate start_time, apts & vpts
     player->cmnvars.start_time = player->avformat_context->start_time * 1000 / AV_TIME_BASE;
     player->cmnvars.apts       = player->astream_index != -1 ? player->cmnvars.start_time : -1;

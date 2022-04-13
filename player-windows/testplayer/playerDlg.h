@@ -17,7 +17,7 @@ public:
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     virtual BOOL PreTranslateMessage(MSG* pMsg);
-
+    void setDlgSizeAsVideo();
 // Implementation
 protected:
     HICON  m_hIcon;

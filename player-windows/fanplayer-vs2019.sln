@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1622
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31829.152
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fanplayer", "fanplayer\fanplayer.vcxproj", "{2537A15B-F975-416D-8106-22CD6EDFCCDE}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -19,6 +19,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffrdpdemuxer", "ffrdpdemuxer\ffrdpdemuxer.vcxproj", "{488C56C6-C223-4CDB-8598-78E4E928F0EE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffobjdet", "ffobjdet\ffobjdet.vcxproj", "{22D248BF-D90F-491E-95A1-72458EB0EBE1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffmepg_demo", "..\..\..\newcommon\3rd\ffmpeg\ffmepg_demo.vcxproj", "{4F6759FB-B62D-4042-A8D4-9241525F2C55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +86,12 @@ Global
 		{22D248BF-D90F-491E-95A1-72458EB0EBE1}.Release|Win32.Build.0 = Release|Win32
 		{22D248BF-D90F-491E-95A1-72458EB0EBE1}.Release|x64.ActiveCfg = Release|x64
 		{22D248BF-D90F-491E-95A1-72458EB0EBE1}.Release|x64.Build.0 = Release|x64
+		{4F6759FB-B62D-4042-A8D4-9241525F2C55}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4F6759FB-B62D-4042-A8D4-9241525F2C55}.Debug|Win32.Build.0 = Debug|Win32
+		{4F6759FB-B62D-4042-A8D4-9241525F2C55}.Debug|x64.ActiveCfg = Debug|Win32
+		{4F6759FB-B62D-4042-A8D4-9241525F2C55}.Release|Win32.ActiveCfg = Release|Win32
+		{4F6759FB-B62D-4042-A8D4-9241525F2C55}.Release|Win32.Build.0 = Release|Win32
+		{4F6759FB-B62D-4042-A8D4-9241525F2C55}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

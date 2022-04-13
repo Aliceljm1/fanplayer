@@ -6,8 +6,9 @@ adev-win.c, Windows下audio播放处理
 vdev-d3d.c，d3d渲染video
 vdev-gdi， gid渲染video
 vdev-cmn.c,对于video渲染层的统一抽象
-## 下列部分函数相关详细描述见 ffplayer.h
-
+## 下列部分函数相关详细描述见 ffplayer.h, 播放器快捷键详见player.rc文件,
+### 当前播放器支持速度调节，旋转画面，录制mp4,截屏，动态切换渲染模式
+### 当前使用的ffmpeg版本是58
 
 初始化ffplayer
 void* player_open(char *file, void *win, PLAYER_INIT_PARAMS *params)

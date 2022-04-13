@@ -422,6 +422,7 @@ static void render_setup_srcrect(RENDER *render, AVFrame *video, AVFrame *srcpic
 void render_video(void *hrender, AVFrame *video)
 {
     RENDER *render = (RENDER*)hrender;
+    DWORD t1, t2, t3, t4;
     if (!hrender) return;
 
     if (render->status & RENDER_DEFINITION_EVAL) {
@@ -459,7 +460,11 @@ void render_video(void *hrender, AVFrame *video)
 #endif
 
         render_setup_srcrect(render, &lockedpic, &srcpic);
+         t1 = GetTickCount();
         vdev_lock(render->vdev, dstpic.data, dstpic.linesize, srcpic.pts);//创建底层的bitmap，图像数据关联dstpic.data，此时c->hbitmaps数据为空
+         t2 = GetTickCount();
+        av_log(NULL,AV_LOG_ERROR,"vdev_lock time=%d\n",(int)(t2 - t1));
+
         if (dstpic.data[0] && srcpic.format != -1 && srcpic.pts != -1) {
             if (  render->sws_src_pixfmt != srcpic.format || render->sws_src_width != srcpic.width || render->sws_src_height != srcpic.height
                || render->sws_dst_pixfmt != vdev->pixfmt  || render->sws_dst_width != dstpic.linesize[6] || render->sws_dst_height != dstpic.linesize[7]) {
@@ -477,7 +482,12 @@ void render_video(void *hrender, AVFrame *video)
             if (render->sws_context) 
                 sws_scale(render->sws_context, (const uint8_t**)srcpic.data, srcpic.linesize, 0, render->sws_src_height, dstpic.data, dstpic.linesize);
         }
+         t3 = GetTickCount();
+        av_log(NULL, AV_LOG_ERROR, "vdev_render time=%d\n", t3 - t2);
+        
         vdev_unlock(render->vdev);//会调用底层d3d或者gdi的unlock，渲染线程的pthread_cond_wait会自动被触发自动渲染准备好数据，此时流程转到 video_render_thread_proc, add by ljm
+         t4 = GetTickCount();
+        av_log(NULL, AV_LOG_ERROR, "vdev_unlock time=%d\n",t4 - t3);
 
 #if CONFIG_ENABLE_SNAPSHOT
         if (render->status & RENDER_SNAPSHOT) {

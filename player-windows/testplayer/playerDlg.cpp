@@ -448,6 +448,11 @@ void CplayerDlg::OnSize(UINT nType, int cx, int cy)
     }
 }
 
+void CplayerDlg::setDlgSizeAsVideo()
+{
+    OnWinfitVideosize();
+}
+
 BOOL CplayerDlg::PreTranslateMessage(MSG *pMsg) 
 {
     if (!m_bLiveDeskMode && TranslateAccelerator(GetSafeHwnd(), m_hAcc, pMsg)) return TRUE;
@@ -474,7 +479,7 @@ BOOL CplayerDlg::PreTranslateMessage(MSG *pMsg)
                 vmode = VIDEO_MODE_STRETCHED;
                 player_setparam(m_ffPlayer, PARAM_VIDEO_MODE, &vmode);
             }
-
+            
             player_setrect(m_ffPlayer, 0, 0, 0, m_rtClient.right, m_rtClient.bottom - 2);
             player_setrect(m_ffPlayer, 1, 0, 0, m_rtClient.right, m_rtClient.bottom - 2);
             if (m_bResetPlayer) {
@@ -503,7 +508,9 @@ BOOL CplayerDlg::PreTranslateMessage(MSG *pMsg)
             break;
         }
         return TRUE;
-    } else if (pMsg->message == WM_KEYDOWN || pMsg->message == WM_KEYUP || pMsg->message == WM_SYSKEYDOWN || pMsg->message == WM_SYSKEYUP) {
+
+    } 
+    else if (pMsg->message == WM_KEYDOWN || pMsg->message == WM_KEYUP || pMsg->message == WM_SYSKEYDOWN || pMsg->message == WM_SYSKEYUP) {
         if (m_bLiveDeskMode) {
             if (pMsg->wParam == VK_CONTROL) {
                 if (pMsg->lParam & (1 << 31)) m_dwExitLiveDesk &= ~(1 << 0);
@@ -522,6 +529,10 @@ BOOL CplayerDlg::PreTranslateMessage(MSG *pMsg)
             return TRUE;
         }
     }
+    else if (pMsg->message == WM_USER + 999) {
+        setDlgSizeAsVideo();
+    }
+    
     return CDialog::PreTranslateMessage(pMsg);
 }
 
