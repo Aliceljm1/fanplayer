@@ -473,6 +473,7 @@ static int player_prepare(PLAYER *player)
         void *d3ddev = NULL;
         if (player->init_params.video_hwaccel == 1) render_getparam(player->render, PARAM_VDEV_GET_D3DDEV, &d3ddev);
         if (dxva2hwa_init(player->vcodec_context, d3ddev, player->cmnvars.winmsg) != 0) {
+            MessageBoxA((HWND)player->cmnvars.winmsg,"dxva2hwa_init faile","dxva2hwa_init",NULL);
             player->init_params.video_hwaccel = 0;
         }
 #endif

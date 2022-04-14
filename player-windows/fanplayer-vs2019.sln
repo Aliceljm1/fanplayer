@@ -22,6 +22,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffobjdet", "ffobjdet\ffobjd
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffmepg_demo", "..\..\..\newcommon\3rd\ffmpeg\ffmepg_demo.vcxproj", "{4F6759FB-B62D-4042-A8D4-9241525F2C55}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffplayer", "ffplayer\ffplayer.vcxproj", "{E92DE68B-23B5-4625-BAAA-42715D148719}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -92,6 +94,14 @@ Global
 		{4F6759FB-B62D-4042-A8D4-9241525F2C55}.Release|Win32.ActiveCfg = Release|Win32
 		{4F6759FB-B62D-4042-A8D4-9241525F2C55}.Release|Win32.Build.0 = Release|Win32
 		{4F6759FB-B62D-4042-A8D4-9241525F2C55}.Release|x64.ActiveCfg = Release|Win32
+		{E92DE68B-23B5-4625-BAAA-42715D148719}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E92DE68B-23B5-4625-BAAA-42715D148719}.Debug|Win32.Build.0 = Debug|Win32
+		{E92DE68B-23B5-4625-BAAA-42715D148719}.Debug|x64.ActiveCfg = Debug|x64
+		{E92DE68B-23B5-4625-BAAA-42715D148719}.Debug|x64.Build.0 = Debug|x64
+		{E92DE68B-23B5-4625-BAAA-42715D148719}.Release|Win32.ActiveCfg = Release|Win32
+		{E92DE68B-23B5-4625-BAAA-42715D148719}.Release|Win32.Build.0 = Release|Win32
+		{E92DE68B-23B5-4625-BAAA-42715D148719}.Release|x64.ActiveCfg = Release|x64
+		{E92DE68B-23B5-4625-BAAA-42715D148719}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

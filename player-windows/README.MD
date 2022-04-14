@@ -53,3 +53,5 @@ void player_seek(void *hplayer, int64_t ms, int type)
 #EXTINF:-1 ,CCTV13 测试m3u8视频播放器
 http://39.134.115.163:8080/PLTV/88888910/224/3221225638/index.m3u8
 
+## 配置文件fanplayer.ini
+video_hwaccel=1 ，开启硬件加速，此时要配置d3d渲染
