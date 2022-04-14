@@ -144,6 +144,7 @@ typedef struct {
     int  video_stream_cur;         // wr 当前视频流
     int  video_thread_count;       // wr 视频解码线程数
     int  video_hwaccel;            // wr 视频硬解码使能
+    int  video_droptime;           // wr 音视频相差丢弃时间差，超过则开始丢帧
     int  video_deinterlace;        // wr 视频反交错使能
     int  video_rotate;             // wr 视频旋转角度
     int  video_codecid;            // wr 视频解码器的 codecid
@@ -183,6 +184,7 @@ typedef struct { // for internal use only
     int64_t start_pts ;
     int64_t apts;  // current apts
     int64_t vpts;  // current vpts
+    int64_t avdiff;  // current avdiff add by ljm 20222-4-14
     int     apktn; // available audio packet number in pktqueue
     int     vpktn; // available video packet number in pktqueue
     void   *winmsg;

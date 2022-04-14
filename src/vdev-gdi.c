@@ -18,22 +18,29 @@ typedef struct {
     int      nclear;
 } VDEVGDICTXT;
 
+
 // 内部函数实现
 static void* video_render_thread_proc(void *param)
 {
     VDEVGDICTXT  *c = (VDEVGDICTXT*)param;
-
+    int pptsSzie;
     while (!(c->status & VDEV_CLOSE)) {
         pthread_mutex_lock(&c->mutex);
         while (c->size <= 0 && (c->status & VDEV_CLOSE) == 0) pthread_cond_wait(&c->cond, &c->mutex);
         if (c->size > 0) {
             c->size--;
+            pptsSzie= sizeof(c->ppts) / sizeof(c->ppts[0]);
             if (c->ppts[c->head] != -1) {
-                SelectObject(c->hdcsrc, c->hbitmaps[c->head]);
-                vdev_win32_render_bboxes (c, c->hdcsrc, c->bbox_list);
-                vdev_win32_render_overlay(c, c->hdcsrc, 1);
-                BitBlt(c->hdcdst, c->rrect.left, c->rrect.top, c->rrect.right - c->rrect.left, c->rrect.bottom - c->rrect.top, c->hdcsrc, 0, 0, SRCCOPY);
-                //拷贝到目标c->hdcdst中去。这个hdc就是显示窗口surface对应的hdc，ctxt->hdcdst = GetDC((HWND)surface); 此时UI完成刷新
+                if (c->cmnvars->avdiff > c->cmnvars->init_params->video_droptime){//如果无法及时渲染，丢帧
+                    av_log(NULL, AV_LOG_ERROR, "***** drop frame:avdiff=%lld,  vpts=%lld,pptsSzie=%d\n", c->cmnvars->avdiff, c->cmnvars->vpts, pptsSzie);
+                }
+                else {
+                    SelectObject(c->hdcsrc, c->hbitmaps[c->head]);
+                    vdev_win32_render_bboxes(c, c->hdcsrc, c->bbox_list);
+                    vdev_win32_render_overlay(c, c->hdcsrc, 1);
+                    BitBlt(c->hdcdst, c->rrect.left, c->rrect.top, c->rrect.right - c->rrect.left, c->rrect.bottom - c->rrect.top, c->hdcsrc, 0, 0, SRCCOPY);
+                    //拷贝到目标c->hdcdst中去。这个hdc就是显示窗口surface对应的hdc，ctxt->hdcdst = GetDC((HWND)surface); 此时UI完成刷新
+                }
                 c->cmnvars->vpts = c->ppts[c->head];
                 av_log(NULL, AV_LOG_INFO, "vpts: %lld\n", c->cmnvars->vpts);
             }

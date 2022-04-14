@@ -479,7 +479,7 @@ void render_video(void *hrender, AVFrame *video)
                     render->sws_dst_width, render->sws_dst_height, render->sws_dst_pixfmt, render->cmnvars->init_params->swscale_type, 0, 0, 0);
             }
             //sws_scale可以进行图像缩放，执行之后dstpic.data已经存在值了，对应c->hbitmaps数据。
-            if (render->sws_context) 
+            if (render->sws_context && render->cmnvars->avdiff <= render->cmnvars->init_params->video_droptime)
                 sws_scale(render->sws_context, (const uint8_t**)srcpic.data, srcpic.linesize, 0, render->sws_src_height, dstpic.data, dstpic.linesize);
         }
          t3 = GetTickCount();
