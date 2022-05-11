@@ -17,7 +17,7 @@
 #define TIMER_ID_DATARATE           5
 #define TIMER_ID_LIVEDESK           6
 #define MAX_WINDOW false //是否全屏，全屏之后无法控制窗口缩放来修改视频渲染大小
-#define KEEP_SIZE  true //是否保持视频纵横比
+#define KEEP_SIZE  false //是否保持视频纵横比
 
 static const int SCREEN_WIDTH  = GetSystemMetrics(SM_CXSCREEN);
 static const int SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
@@ -434,14 +434,14 @@ void CplayerDlg::OnSize(UINT nType, int cx, int cy)
     CDialog::OnSize(nType, cx, cy);
 
     if (nType != SIZE_MINIMIZED) {
-        GetClientRect(&m_rtClient);
-        cx = cx < SCREEN_WIDTH  ? cx : SCREEN_WIDTH;
-        cy = cy < SCREEN_HEIGHT ? cy : SCREEN_HEIGHT;
-
-        if (MAX_WINDOW) {
-            cx = SCREEN_WIDTH;
-            cy = SCREEN_HEIGHT;
-        }
+        //控制显示范围不超过客户区域大小，目前需要测试扩展屏放开了， add by ljm 2022-5-11
+        //GetClientRect(&m_rtClient);
+        //cx = cx < SCREEN_WIDTH  ? cx : SCREEN_WIDTH;
+        //cy = cy < SCREEN_HEIGHT ? cy : SCREEN_HEIGHT;
+        //if (MAX_WINDOW) {
+        //    cx = SCREEN_WIDTH;
+        //    cy = SCREEN_HEIGHT;
+        //}
 
         player_setrect(m_ffPlayer, 0, 0, 0, cx, cy - 2);
         player_setrect(m_ffPlayer, 1, 0, 0, cx, cy - 2);
