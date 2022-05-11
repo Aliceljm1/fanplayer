@@ -472,18 +472,25 @@ void render_video(void *hrender, AVFrame *video)
                 render->sws_src_width  = srcpic.width;
                 render->sws_src_height = srcpic.height;
                 render->sws_dst_pixfmt = vdev->pixfmt;
-                render->sws_dst_width  = dstpic.linesize[6];//当前播放器窗口支持调整宽高，从而最终影响render->sws_dst_width
-                render->sws_dst_height = dstpic.linesize[7];
+                render->sws_dst_width  = srcpic.width; dstpic.linesize[6];//当前播放器窗口支持调整宽高，从而最终影响render->sws_dst_width
+                render->sws_dst_height = srcpic.height; dstpic.linesize[7];//设置为srcpic.height; 强制和视频宽高一致不缩放，只做格式转换
                 if (render->sws_context) sws_freeContext(render->sws_context);
                 render->sws_context = sws_getContext(render->sws_src_width, render->sws_src_height, render->sws_src_pixfmt,
                     render->sws_dst_width, render->sws_dst_height, render->sws_dst_pixfmt, render->cmnvars->init_params->swscale_type, 0, 0, 0);
             }
-            //sws_scale可以进行图像缩放，执行之后dstpic.data已经存在值了，对应c->hbitmaps数据。
-            if (render->sws_context && render->cmnvars->avdiff <= render->cmnvars->init_params->video_droptime)
-                sws_scale(render->sws_context, (const uint8_t**)srcpic.data, srcpic.linesize, 0, render->sws_src_height, dstpic.data, dstpic.linesize);
+
+            __try {
+                //sws_scale可以进行图像缩放，执行之后dstpic.data已经存在值了，对应c->hbitmaps数据。
+                if (render->sws_context && render->cmnvars->avdiff <= render->cmnvars->init_params->video_droptime)
+                    sws_scale(render->sws_context, (const uint8_t**)srcpic.data, srcpic.linesize, 0, render->sws_src_height, dstpic.data, dstpic.linesize);
+                }
+
+            __except (EXCEPTION_EXECUTE_HANDLER) {
+                av_log(NULL, AV_LOG_ERROR, "sws_scale error\n");
+            }
         }
          t3 = GetTickCount();
-        av_log(NULL, AV_LOG_ERROR, "vdev_render time=%d\n", t3 - t2);
+        av_log(NULL, AV_LOG_ERROR, "vdev_sws_scale time=%d\n", t3 - t2);
         
         vdev_unlock(render->vdev);//会调用底层d3d或者gdi的unlock，渲染线程的pthread_cond_wait会自动被触发自动渲染准备好数据，此时流程转到 video_render_thread_proc, add by ljm
          t4 = GetTickCount();

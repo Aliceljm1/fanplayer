@@ -227,6 +227,12 @@ static void d3d_draw_surf(VDEVD3DCTXT *c, LPDIRECT3DSURFACE9 surf)
         } else c->rotrect = c->rrect;
     }
 
+    //c->rotrect.left = 0;
+    //c->rotrect.top = 0;
+    //c->rotrect.right = 1920;
+    //c->rotrect.bottom = 1080;
+
+
     IDirect3DDevice9_StretchRect(c->pD3DDev, c->surfb, NULL, c->surfw, NULL, D3DTEXF_POINT);
     IDirect3DDevice9_StretchRect(c->pD3DDev, surf, NULL, c->surfw, c->rotate ? &c->rotrect : &c->vrect, D3DTEXF_LINEAR);
     IDirect3DSurface9_GetDC     (c->surfw, &hdc);
